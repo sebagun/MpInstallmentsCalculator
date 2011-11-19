@@ -1,6 +1,6 @@
-﻿* github
-* mejor look & feel
+﻿* mejor look & feel
 * src a inglés
 * i18n en (dflt) + es
 * about (options.html) con créditos/github/licencia/3ras partes...
+* agregar README.md para github
 * subir a opera
