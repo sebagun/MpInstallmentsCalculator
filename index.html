@@ -1,0 +1,25 @@
+﻿<!doctype html>
+<html>
+	<head>
+		<title>MercadoPago Installments Calculator</title>
+		<script>
+			window.addEventListener("load", function() {
+				var theButton;
+				var UIItemProperties = {
+					disabled: false,
+					title: "MercadoPago Installments Calculator",
+					icon: "assets/icons/icon_18.png",
+					popup: {
+						href: "popup.html",
+						width: 500,
+						height: 600
+					}
+				}
+				theButton = opera.contexts.toolbar.createItem( UIItemProperties );
+				opera.contexts.toolbar.addItem( theButton );
+			}, false);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

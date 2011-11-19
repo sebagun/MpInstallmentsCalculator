@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html>
+<head>
+	<title>MercadoPago Installments Calculator</title>
+	<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/js/jquery.jsonp.min.js"></script>
+	<script type="text/javascript" src="/popup.js"></script>
+	<link type="text/css" href="/assets/css/popup.css" rel="stylesheet" />
+</head>
+<body>
+	<fieldset id="marketplaces">
+		<legend>Seleccione el sitio sobre el que va a operar</legend>
+	</fieldset>
+	<fieldset id="sites">
+		<legend>Seleccione el país sobre el que va a operar</legend>
+	</fieldset>
+	<fieldset id="amountToPay">
+		<legend>Monto a pagar (opcional)</legend>
+		<label>
+			<span id="currency"></span>
+			<input type="text" name="amount" value="" id="amount" />
+			<img src="/assets/img/action-remove.png" alt="Limpiar monto" title="Limpiar monto"  id="clearAmount" class="hand" />
+		</label>
+	</fieldset>
+	<fieldset id="cards">
+		<legend>Seleccione la tarjeta</legend>
+		<div class="spinner-medium" />
+	</fieldset>
+	<fieldset id="pricings">
+		<legend>Pricings disponibles</legend>
+		<div class="spinner-medium" />
+	</fieldset>
+	<fieldset id="cardIssuers">
+		<legend>Bancos con promociones disponibles</legend>
+		<div class="spinner-medium" />
+	</fieldset>
+	<p id="test"></p>
+</body>
+</html>

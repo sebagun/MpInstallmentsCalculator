@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" version="1.0.0">
+	<name short="Installments Calc">MercadoPago Installments Calculator</name>
+	<description>Calculador de cuotas de MercadoPago y MercadoLibre para pagos con tarjetas de crédito.</description>
+	<author href="https://github.com/sebagun" email="sebastiangun@gmail.com">Sebastián Gun</author>
+	<icon src="assets/icons/icon_16.png"/>
+	<icon src="assets/icons/icon_18.png"/>
+	<icon src="assets/icons/icon_32.png"/>
+	<icon src="assets/icons/icon_64.png"/>
+	<icon src="assets/icons/icon_128.png"/>
+	<!-- Recursos a los que accedo APIs/logos -->
+	<access origin="https://mercadolibre.com" subdomains="true"/>
+	<access origin="http://mlstatic.com" subdomains="true"/>
+	<!-- Preferencias por defecto -->
+	<preference name="marketplaceId" value="NONE"/>
+	<preference name="siteId" value="MLA"/>
+</widget>

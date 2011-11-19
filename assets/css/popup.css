@@ -1,0 +1,13 @@
+﻿.spinner-small {
+	background: transparent url(/assets/img/spinner-small.gif) no-repeat top left;
+	width: 16px;
+	height: 16px;
+}
+.spinner-medium {
+	background: transparent url(/assets/img/spinner-medium.gif) no-repeat top left;
+	width: 32px;
+	height: 32px;
+}
+.hand {
+	cursor: pointer;
+}
