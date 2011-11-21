@@ -131,7 +131,7 @@ function getCardInfo() {
 				});
 			}
 			else {
-				$("#cardIssuers").append("<label>Actualmente no hay bancos con promociones para esta tarjeta</label>");
+				$("#cardIssuers").append("<label>Actualmente no hay bancos con<br />promociones para esta tarjeta</label>");
 			}
 		},
 		error: function(XHR, textStatus, errorThrown){
@@ -155,7 +155,7 @@ function round(value) {
 function makePricingsTable(pricings) {
 	var table = new Array("<table border=\"1\" cellspacing=\"0\"><tr><th>Cuotas</th><th>Interés</th>");
 	if (amount > 0) {
-		table.push("<th>Monto total</th><th>Monto por cuota</th>");
+		table.push("<th>Monto<br />total</th><th>Monto<br />por cuota</th>");
 	}
 	table.push("<th>Extras</th></tr>");
 	$.each(pricings, function(index, value) {
@@ -175,7 +175,7 @@ function makePricingsTable(pricings) {
 		table.push("</td></tr>");
 	});
 	if (selectedCardIssuer()) {
-		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\">");
+		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\" class=\"white-background\">");
 		table.push("<a href=\"javascript:restorePayerCosts();\">Restablecer pricings originales de la tarjeta</a>");
 		table.push("</td></tr>");
 	}

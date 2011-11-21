@@ -1,4 +1,47 @@
-﻿.spinner-small {
+﻿* {
+	font: 12px Helvetica, Arial, sans-serif;
+	vertical-align: middle;
+}
+body {
+	background: url(/assets/img/popup-back.gif) left top repeat-x;
+}
+fieldset {
+	border: none;
+	border-top: 1px solid #C9DCA6;
+}
+legend {
+	font-weight: bold;
+}
+label {
+	margin-right: 6px;
+}
+#pricings, #cardIssuers {
+	display: inline;
+}
+#pricings {
+	float: left;
+	width: 50%;
+}
+#cardIssuers {
+	float: right;
+	width: 50%;
+}
+#cardIssuers label {
+	display: block;
+}
+#pricings td, #pricings th {
+	padding: 2px;
+}
+#pricings th {
+	background: #C9DCA6;
+}
+#pricings tr:nth-child(even) {
+	background: #F5FCE6;
+}
+#pricings tr:nth-child(odd) {
+	background: #FFF;
+}
+.spinner-small {
 	background: transparent url(/assets/img/spinner-small.gif) no-repeat top left;
 	width: 16px;
 	height: 16px;
@@ -10,4 +53,10 @@
 }
 .hand {
 	cursor: pointer;
+}
+.help {
+	cursor: help;
+}
+.white-background {
+	background: #FFF;
 }

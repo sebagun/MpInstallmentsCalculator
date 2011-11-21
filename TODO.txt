@@ -1,6 +1,6 @@
-﻿* mejor look & feel
-* src a inglés
+﻿* src a inglés
 * i18n en (dflt) + es
+* icono de extension
 * about (options.html) con créditos/github/licencia/3ras partes...
 * agregar README.md para github
 * subir a opera
