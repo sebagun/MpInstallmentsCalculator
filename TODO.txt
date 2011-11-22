@@ -1,5 +1,4 @@
 ﻿* src a inglés
 * i18n en (dflt) + es
-* icono de extension
 * agregar README.md para github
 * subir a opera
