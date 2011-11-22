@@ -1,0 +1,35 @@
+﻿* {
+	font: 12px Helvetica, Arial, sans-serif;
+	margin: 10px 0;
+}
+body {
+	background: url(/assets/img/options-back.png) left top repeat;
+}
+div {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 6px solid #C9DCA6;
+	border-radius: 25px;
+	padding: 0 10px;
+	background-color: #FFF;
+}
+h1 {
+	text-align: center;
+	font: 20px Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	color: #C9DCA6;
+}
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+fieldset {
+	border: none;
+	border-top: 1px solid #C9DCA6;
+	background: url(/assets/img/popup-back.gif) left 8px repeat-x;
+}
+legend {
+	font-weight: bold;
+}
