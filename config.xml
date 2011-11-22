@@ -3,7 +3,6 @@
 	<name short="Installments Calc">MercadoPago Installments Calculator</name>
 	<name short="Installments Calc" xml:lang="en">MercadoPago Installments Calculator</name>
 	<name short="Calculador de cuotas" xml:lang="es">Calculador de cuotas de MercadoPago</name>
-	<description>Installments calculator for MercadoPago and MercadoLibre credit card payments.</description>
 	<description xml:lang="en">Installments calculator for MercadoPago and MercadoLibre credit card payments.</description>
 	<description xml:lang="es">Calculador de cuotas de MercadoPago y MercadoLibre para pagos con tarjetas de crédito.</description>
 	<author href="https://github.com/sebagun" email="sebastiangun@gmail.com">Sebastián Gun</author>
