@@ -1,13 +1,14 @@
 ﻿<!doctype html>
 <html>
 	<head>
+		<script type="text/javascript" src="/messages.js"></script>
 		<title>MercadoPago Installments Calculator</title>
 		<script>
 			window.addEventListener("load", function() {
 				var theButton;
 				var UIItemProperties = {
 					disabled: false,
-					title: "MercadoPago Installments Calculator",
+					title: getMsg("extension.name"),
 					icon: "assets/icons/icon_18.png",
 					popup: {
 						href: "popup.html",

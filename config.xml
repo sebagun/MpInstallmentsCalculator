@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" version="1.0.0" id="https://github.com/sebagun/MpInstallmentsCalculator">
 	<name short="Installments Calc">MercadoPago Installments Calculator</name>
-	<description>Calculador de cuotas de MercadoPago y MercadoLibre para pagos con tarjetas de crédito.</description>
+	<name short="Installments Calc" xml:lang="en">MercadoPago Installments Calculator</name>
+	<name short="Calculador de cuotas" xml:lang="es">Calculador de cuotas de MercadoPago</name>
+	<description>Installments calculator for MercadoPago and MercadoLibre credit card payments.</description>
+	<description xml:lang="en">Installments calculator for MercadoPago and MercadoLibre credit card payments.</description>
+	<description xml:lang="es">Calculador de cuotas de MercadoPago y MercadoLibre para pagos con tarjetas de crédito.</description>
 	<author href="https://github.com/sebagun" email="sebastiangun@gmail.com">Sebastián Gun</author>
-	<license href="http://www.opensource.org/licenses/mit-license.php">Distribuido bajo la licencia del MIT</license>
+	<license href="http://www.opensource.org/licenses/mit-license.php">Licensed under the MIT license</license>
+	<license href="http://www.opensource.org/licenses/mit-license.php" xml:lang="en">Licensed under the MIT license</license>
+	<license href="http://www.opensource.org/licenses/mit-license.php" xml:lang="es">Distribuido bajo la licencia del MIT</license>
 	<icon src="assets/icons/icon_16.png"/>
 	<icon src="assets/icons/icon_18.png"/>
 	<icon src="assets/icons/icon_32.png"/>

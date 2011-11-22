@@ -4,35 +4,36 @@
 	<title>MercadoPago Installments Calculator</title>
 	<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/assets/js/jquery.jsonp.min.js"></script>
+	<script type="text/javascript" src="/messages.js"></script>
 	<script type="text/javascript" src="/popup.js"></script>
 	<link type="text/css" href="/assets/css/popup.css" rel="stylesheet" />
 </head>
 <body>
 	<fieldset id="marketplaces">
-		<legend>Seleccione el sitio sobre el que va a operar</legend>
+		<legend></legend>
 	</fieldset>
 	<fieldset id="sites">
-		<legend>Seleccione el país sobre el que va a operar</legend>
+		<legend></legend>
 	</fieldset>
 	<fieldset id="amountToPay">
-		<legend>Monto a pagar (opcional)</legend>
+		<legend></legend>
 		<label>
 			<span id="currency"></span>
 			<input type="text" name="amount" value="" id="amount" maxlength="9" />
-			<img src="/assets/img/action-remove.png" alt="Limpiar monto" title="Limpiar monto" id="clearAmount" class="hand" />
-			<img src="/assets/img/action-help.png" alt="Ayuda" title="Puede ingresar el monto a pagar para calcular el monto total con interés y en cuotas" class="help" />
+			<img src="/assets/img/action-remove.png" id="clearAmount" class="hand" />
+			<img src="/assets/img/action-help.png" id="helpAmount" class="help" />
 		</label>
 	</fieldset>
 	<fieldset id="cards">
-		<legend>Seleccione la tarjeta</legend>
+		<legend></legend>
 		<div class="spinner-medium" />
 	</fieldset>
 	<fieldset id="pricings">
-		<legend>Pricings disponibles</legend>
+		<legend></legend>
 		<div class="spinner-medium" />
 	</fieldset>
 	<fieldset id="cardIssuers">
-		<legend>Bancos con promociones disponibles</legend>
+		<legend></legend>
 		<div class="spinner-medium" />
 	</fieldset>
 	<p id="test"></p>

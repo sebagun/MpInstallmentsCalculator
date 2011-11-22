@@ -1,4 +1,2 @@
-﻿* src a inglés
-* i18n en (dflt) + es
-* agregar README.md para github
+﻿* agregar README.md para github
 * subir a opera
