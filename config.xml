@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" version="1.0.0">
+<widget xmlns="http://www.w3.org/ns/widgets" version="1.0.0" id="https://github.com/sebagun/MpInstallmentsCalculator">
 	<name short="Installments Calc">MercadoPago Installments Calculator</name>
 	<description>Calculador de cuotas de MercadoPago y MercadoLibre para pagos con tarjetas de crédito.</description>
 	<author href="https://github.com/sebagun" email="sebastiangun@gmail.com">Sebastián Gun</author>
