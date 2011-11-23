@@ -72,9 +72,9 @@ $(document).ready(function() {
 	getCardsInfo();
 });
 
-function error() {
+function error(errorMsg) {
 	$(".spinner-medium, .spinner-small").hide();
-	alert(getMsg("error.ups"));
+	alert(getMsg(errorMsg));
 }
 
 function selectedMarketplace() {
@@ -112,7 +112,7 @@ function getCardsInfo() {
 			});
 		},
 		error: function(XHR, textStatus, errorThrown){
-			error();
+			error("error.mlapi");
 		}
 	});
 }
@@ -151,7 +151,7 @@ function getCardInfo() {
 			}
 		},
 		error: function(XHR, textStatus, errorThrown){
-			error();
+			error("error.mlapi");
 		}
 	});
 }

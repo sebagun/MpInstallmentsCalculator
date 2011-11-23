@@ -32,3 +32,4 @@ msg["pricings.table.extras"] = "Extras";
 msg["pricings.table.restore"] = "Restore original card pricings";
 msg["cardIssuers.none"] = "Currently there are no banks<br />with promotions for this card";
 msg["error.ups"] = "Ups... there was an error. Please notify it to me to sebastiangun@gmail.com with the steps to reproduce it. Thanks!";
+msg["error.mlapi"] = "The MercadoLibre's API seems to be down. Please try again in a few minutes.";
