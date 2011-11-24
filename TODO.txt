@@ -1,2 +1,2 @@
-﻿* agregar README.md para github
-* subir a opera
+﻿* agregar README.md para github [cuando esté en Opera así pongo el link a la extensión]
+* subir a opera [WIP]
