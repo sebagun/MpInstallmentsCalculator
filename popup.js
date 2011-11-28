@@ -80,6 +80,16 @@ $(document).ready(function() {
 		clearAmount();
 	});
 	
+	// Validate the collector after the user clicks on the submit icon, or when the user hits enter on the field
+	$("#collector").keyup(function(e) {
+		if (e.keyCode == 13) {
+			updateCollector();
+		}
+	});
+	$("#submitCollector").click(function() {
+		updateCollector();
+	});
+	
 	$("#clearCollector").click(function() {
 		clearCollector();
 	});
@@ -102,7 +112,7 @@ function selectedSite() {
 }
 
 function selectedCollectorDataType() {
-	return $('#collectorAdditionalData input:checked').val();
+	return $('#collectorAdditionalData input[type=radio]:checked').val();
 }
 
 function selectedCard() {
@@ -281,12 +291,70 @@ function clearAmount() {
 	}
 }
 
+function updateCollector() {
+	if ($('#collector').val() == "") {
+		return;
+	}
+	
+	$("#okCollector, #errorCollector").hide("fast");
+	$("#spinnerCollector").show("fast");
+	
+	// Fix the input
+	switch (selectedCollectorDataType()) {
+		case "nickname":
+			$('#collector').val($('#collector').val().toUpperCase());
+			break;
+		case "email":
+			$('#collector').val($('#collector').val().toLowerCase());
+			break;
+		case "id":
+			// Nothing to fix
+			break;
+	}
+	
+	// Check minimal integrity
+	switch (selectedCollectorDataType()) {
+		case "nickname":
+			// Nothing to validate
+			break;
+		case "email":
+			if (!$('#collector').val().match(/^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+$/)) {
+				errorCollector("collectorUser.invalid.email");
+				return;
+			}
+			break;
+		case "id":
+			if (isNaN(parseInt($('#collector').val(), 10))) {
+				errorCollector("collectorUser.invalid.id");
+				return;
+			}
+			break;
+	}
+	
+	// Format OK, ready to go...
+	getUserInfo();
+}
+
+function errorCollector(msg) {
+	$("#spinnerCollector").hide("fast");
+	$("#errorCollector").attr({alt: getMsg(msg), title: getMsg(msg)}).show("fast");
+}
+
 function clearCollector() {
 	if ($('#collector').val() != "") {
+		$("#okCollector, #errorCollector, #spinnerCollector").hide("fast");
 		$('#collector').val([]);
 		collectorId = null;
 		getCardsInfo();
 	}
+}
+
+function getUserInfo() {
+	/*
+	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+	*/
 }
 
 function updatePricingsTable() {
