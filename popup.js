@@ -17,6 +17,7 @@ var badges = [
 var payerCosts = [];
 var exceptionsByCardIssuer = [];
 var amount = 0.0;
+var collectorId = null;
 
 function fillLocalizedUI() {
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
@@ -30,15 +31,15 @@ function fillLocalizedUI() {
 	$("#clearAmount").attr({alt: getMsg("amountToPay.clear.alt"), title: getMsg("amountToPay.clear.title")});
 	$("#helpAmount").attr({alt: getMsg("amountToPay.help.alt"), title: getMsg("amountToPay.help.title")});
 	
-	$("#receiverUser").text(getMsg("receiverUser.label"));
-	$("#clearReceiver").attr({alt: getMsg("receiverUser.clear.alt"), title: getMsg("receiverUser.clear.title")});
-	$("#helpReceiver").attr({alt: getMsg("receiverUser.help.alt"), title: getMsg("receiverUser.help.title")});
-	$("#submitReceiver").attr({alt: getMsg("receiverUser.submit.alt"), title: getMsg("receiverUser.submit.title")});
-	$("#okReceiver").attr({alt: getMsg("receiverUser.ok.alt"), title: getMsg("receiverUser.ok.title")});
-	$("#errorReceiver").attr({alt: getMsg("receiverUser.error.alt"), title: getMsg("receiverUser.error.title")});
-	$("#receiverDataTypeNickname").text(getMsg("receiverUser.dataType.nickname"));
-	$("#receiverDataTypeEmail").text(getMsg("receiverUser.dataType.email"));
-	$("#receiverDataTypeId").text(getMsg("receiverUser.dataType.id"));
+	$("#collectorUser").text(getMsg("collectorUser.label"));
+	$("#clearCollector").attr({alt: getMsg("collectorUser.clear.alt"), title: getMsg("collectorUser.clear.title")});
+	$("#helpCollector").attr({alt: getMsg("collectorUser.help.alt"), title: getMsg("collectorUser.help.title")});
+	$("#submitCollector").attr({alt: getMsg("collectorUser.submit.alt"), title: getMsg("collectorUser.submit.title")});
+	$("#okCollector").attr({alt: getMsg("collectorUser.ok.alt"), title: getMsg("collectorUser.ok.title")});
+	$("#errorCollector").attr({alt: getMsg("collectorUser.error.alt"), title: getMsg("collectorUser.error.title")});
+	$("#collectorDataTypeNickname").text(getMsg("collectorUser.dataType.nickname"));
+	$("#collectorDataTypeEmail").text(getMsg("collectorUser.dataType.email"));
+	$("#collectorDataTypeId").text(getMsg("collectorUser.dataType.id"));
 }
 
 $(document).ready(function() {
@@ -46,7 +47,7 @@ $(document).ready(function() {
 	fillLocalizedUI();
 	
 	// Hide stuff
-	$(".spinner-medium, .spinner-small, #okReceiver, #errorReceiver").hide();
+	$(".spinner-medium, .spinner-small, #okCollector, #errorCollector").hide();
 	
 	// Load marketplaces
 	$.each(marketplaces, function(index, value) {
@@ -79,6 +80,10 @@ $(document).ready(function() {
 		clearAmount();
 	});
 	
+	$("#clearCollector").click(function() {
+		clearCollector();
+	});
+	
 	// Search for credit cards of default site/marketplace
 	getCardsInfo();
 });
@@ -94,6 +99,10 @@ function selectedMarketplace() {
 
 function selectedSite() {
 	return $('#sites input:checked').val();
+}
+
+function selectedCollectorDataType() {
+	return $('#collectorAdditionalData input:checked').val();
 }
 
 function selectedCard() {
@@ -265,9 +274,19 @@ function updateAmounts() {
 }
 
 function clearAmount() {
-	$('#amount').val([]);
-	amount = 0.0;
-	updatePricingsTable();
+	if ($('#amount').val() != "") {
+		$('#amount').val([]);
+		amount = 0.0;
+		updatePricingsTable();
+	}
+}
+
+function clearCollector() {
+	if ($('#collector').val() != "") {
+		$('#collector').val([]);
+		collectorId = null;
+		getCardsInfo();
+	}
 }
 
 function updatePricingsTable() {
