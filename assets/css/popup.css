@@ -15,6 +15,19 @@ legend {
 label {
 	margin-right: 6px;
 }
+#additionalData legend + div {
+	/* Only give the margin-bottom to the first group, not to the second */
+	margin-bottom: 6px;
+}
+#additionalData .column {
+	display: inline-block;
+}
+#additionalData .label {
+	width: 104px;
+}
+#additionalData .actions label span {
+	vertical-align: text-bottom;
+}
 #pricings, #cardIssuers {
 	display: inline;
 }

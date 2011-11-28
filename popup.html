@@ -15,14 +15,40 @@
 	<fieldset id="sites">
 		<legend></legend>
 	</fieldset>
-	<fieldset id="amountToPay">
+	<fieldset id="additionalData">
 		<legend></legend>
-		<label>
-			<span id="currency"></span>
-			<input type="text" name="amount" value="" id="amount" maxlength="9" />
-			<img src="/assets/img/action-remove.png" id="clearAmount" class="hand" />
-			<img src="/assets/img/action-help.png" id="helpAmount" class="help" />
-		</label>
+		<div id="amountAdditionalData">
+			<div class="column label">
+				<span id="amountToPay"></span>
+				<span id="currency"></span>
+			</div>
+			<div class="column input">
+				<input type="text" name="amount" value="" id="amount" maxlength="9" />
+			</div>
+			<div class="column actions">
+				<img src="/assets/img/action-remove.png" id="clearAmount" class="hand" />
+				<img src="/assets/img/action-help.png" id="helpAmount" class="help" />
+			</div>
+		</div>
+		<div id="receiverAdditionalData">
+			<div class="column label">
+				<span id="receiverUser"></span>
+			</div>
+			<div class="column input">
+				<input type="text" name="receiver" value="" id="receiver" maxlength="60" />
+			</div>
+			<div class="column actions">
+				<img src="/assets/img/action-submit.png" id="submitReceiver" class="hand" />
+				<img src="/assets/img/spinner-small.gif" id="spinnerReceiver" class="spinner-small" />
+				<img src="/assets/img/action-ok.png" id="okReceiver" />
+				<img src="/assets/img/action-error.png" id="errorReceiver" class="help" />
+				<img src="/assets/img/action-remove.png" id="clearReceiver" class="hand" />
+				<img src="/assets/img/action-help.png" id="helpReceiver" class="help" />
+				<label><input type="radio" name="receiverDataType" value="nickname" checked /><span id="receiverDataTypeNickname"></span></label>
+				<label><input type="radio" name="receiverDataType" value="email" /><span id="receiverDataTypeEmail"></span></label>
+				<label><input type="radio" name="receiverDataType" value="id" /><span id="receiverDataTypeId"></span></label>
+			</div>
+		</div>
 	</fieldset>
 	<fieldset id="cards">
 		<legend></legend>

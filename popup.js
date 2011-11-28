@@ -21,13 +21,24 @@ var amount = 0.0;
 function fillLocalizedUI() {
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
 	$("#sites legend").text(getMsg("sites.legend"));
-	$("#amountToPay legend").text(getMsg("amountToPay.legend"));
+	$("#additionalData legend").text(getMsg("additionalData.legend"));
 	$("#cards legend").text(getMsg("cards.legend"));
 	$("#pricings legend").text(getMsg("pricings.legend"));
 	$("#cardIssuers legend").text(getMsg("cardIssuers.legend"));
 	
+	$("#amountToPay").text(getMsg("amountToPay.label"));
 	$("#clearAmount").attr({alt: getMsg("amountToPay.clear.alt"), title: getMsg("amountToPay.clear.title")});
 	$("#helpAmount").attr({alt: getMsg("amountToPay.help.alt"), title: getMsg("amountToPay.help.title")});
+	
+	$("#receiverUser").text(getMsg("receiverUser.label"));
+	$("#clearReceiver").attr({alt: getMsg("receiverUser.clear.alt"), title: getMsg("receiverUser.clear.title")});
+	$("#helpReceiver").attr({alt: getMsg("receiverUser.help.alt"), title: getMsg("receiverUser.help.title")});
+	$("#submitReceiver").attr({alt: getMsg("receiverUser.submit.alt"), title: getMsg("receiverUser.submit.title")});
+	$("#okReceiver").attr({alt: getMsg("receiverUser.ok.alt"), title: getMsg("receiverUser.ok.title")});
+	$("#errorReceiver").attr({alt: getMsg("receiverUser.error.alt"), title: getMsg("receiverUser.error.title")});
+	$("#receiverDataTypeNickname").text(getMsg("receiverUser.dataType.nickname"));
+	$("#receiverDataTypeEmail").text(getMsg("receiverUser.dataType.email"));
+	$("#receiverDataTypeId").text(getMsg("receiverUser.dataType.id"));
 }
 
 $(document).ready(function() {
@@ -35,7 +46,7 @@ $(document).ready(function() {
 	fillLocalizedUI();
 	
 	// Hide stuff
-	$(".spinner-medium, .spinner-small").hide();
+	$(".spinner-medium, .spinner-small, #okReceiver, #errorReceiver").hide();
 	
 	// Load marketplaces
 	$.each(marketplaces, function(index, value) {
