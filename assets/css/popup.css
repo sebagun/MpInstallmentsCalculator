@@ -28,6 +28,12 @@ label {
 #additionalData .actions label span {
 	vertical-align: text-bottom;
 }
+#amount {
+	width: 100px;
+}
+#collector {
+	width: 156px;
+}
 #pricings, #cardIssuers {
 	display: inline;
 }

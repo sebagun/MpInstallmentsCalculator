@@ -19,6 +19,17 @@ var exceptionsByCardIssuer = [];
 var amount = 0.0;
 var collectorId = null;
 
+// MercadoLibre's API endpoints
+const mlapiBaseUrl = "https://api.mercadolibre.com/";
+var mlapiUrls = new Array();
+mlapiUrls["users.by.nickname"] = mlapiBaseUrl + "users/search?nickname=##USER_DATA##&callback=?";
+mlapiUrls["users.by.email"] = mlapiBaseUrl + "users/search?email=##USER_DATA##&callback=?";
+mlapiUrls["users.by.id"] = mlapiBaseUrl + "users/##USER_DATA##?callback=?";
+mlapiUrls["paymentMethods.list"] = mlapiBaseUrl + "sites/##SITE##/payment_methods?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["paymentMethods.single"] = mlapiBaseUrl + "sites/##SITE##/payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["acceptedPaymentMethods.list"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
+
 function fillLocalizedUI() {
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
 	$("#sites legend").text(getMsg("sites.legend"));
@@ -123,11 +134,19 @@ function selectedCardIssuer() {
 	return $('#cardIssuers input:checked').val();
 }
 
+function getCardsInfoUrl() {
+	return (collectorId == null) ? 
+		mlapiUrls["paymentMethods.list"].replace("##SITE##", selectedSite()).replace(
+			"##MARKETPLACE##", selectedMarketplace()) :
+		mlapiUrls["acceptedPaymentMethods.list"].replace("##USER_ID##", ""+collectorId).replace(
+			"##MARKETPLACE##", selectedMarketplace());
+}
+
 function getCardsInfo() {
 	$('#cards label, #pricings table, #cardIssuers label').hide("fast").remove();
 	$("#cards .spinner-medium").show("fast");
 	$.jsonp({
-		url: "https://api.mercadolibre.com/sites/" + selectedSite() + "/payment_methods?marketplace=" + selectedMarketplace() + "&callback=?",
+		url: getCardsInfoUrl(),
 		timeout: 30000,
 		success: function(data, status) {
 			$("#cards .spinner-medium").hide("fast");
@@ -147,11 +166,21 @@ function getCardsInfo() {
 	});
 }
 
+function getCardInfoUrl() {
+	return (collectorId == null) ? 
+		mlapiUrls["paymentMethods.single"].replace("##SITE##", selectedSite()).replace(
+			"##PAYMENT_METHOD##", selectedCard()).replace(
+				"##MARKETPLACE##", selectedMarketplace()) :
+		mlapiUrls["acceptedPaymentMethods.single"].replace("##USER_ID##", ""+collectorId).replace(
+			"##PAYMENT_METHOD##", selectedCard()).replace(
+				"##MARKETPLACE##", selectedMarketplace());
+}
+
 function getCardInfo() {
 	$('#pricings table, #cardIssuers label').hide("fast").remove();
 	$("#pricings .spinner-medium, #cardIssuers .spinner-medium").show("fast");
 	$.jsonp({
-		url: "https://api.mercadolibre.com/sites/" + selectedSite() + "/payment_methods/" + selectedCard() + "?marketplace=" + selectedMarketplace() + "&callback=?",
+		url: getCardInfoUrl(),
 		timeout: 30000,
 		success: function(data, status) {
 			$("#pricings .spinner-medium, #cardIssuers .spinner-medium").hide("fast");
@@ -338,6 +367,7 @@ function updateCollector() {
 function errorCollector(msg) {
 	$("#spinnerCollector").hide("fast");
 	$("#errorCollector").attr({alt: getMsg(msg), title: getMsg(msg)}).show("fast");
+	collectorId = null;
 }
 
 function clearCollector() {
@@ -350,11 +380,29 @@ function clearCollector() {
 }
 
 function getUserInfo() {
-	/*
-	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-	TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-	*/
+	$.jsonp({
+		url: mlapiUrls["users.by." + selectedCollectorDataType()].replace("##USER_DATA##", $('#collector').val()),
+		timeout: 30000,
+		success: function(data, status) {
+			$("#spinnerCollector").hide("fast");
+			if (data[0] == 200) {
+				$("#okCollector").show("fast");
+				collectorId = data[2].id;
+				if (selectedCard()) {
+					getCardInfo();
+				}
+				else {
+					getCardsInfo();
+				}
+			}
+			else {
+				errorCollector("collectorUser.notFound." + selectedCollectorDataType());
+			}
+		},
+		error: function(XHR, textStatus, errorThrown){
+			error("error.mlapi");
+		}
+	});
 }
 
 function updatePricingsTable() {
