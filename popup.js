@@ -93,8 +93,12 @@ $(document).ready(function() {
 	
 	// Validate the collector after the user clicks on the submit icon, or when the user hits enter on the field
 	$("#collector").keyup(function(e) {
-		if (e.keyCode == 13) {
+		if (e.keyCode == 13) { // enter key
 			updateCollector();
+		}
+		else if ((e.keyCode == 8 || e.keyCode == 46) && $('#collector').val() == "") { // backspace or delete keys
+			// If the user just cleared the field through the keyboard, force a clean clear
+			clearCollector(true);
 		}
 	});
 	$("#submitCollector").click(function() {
@@ -102,7 +106,7 @@ $(document).ready(function() {
 	});
 	
 	$("#clearCollector").click(function() {
-		clearCollector();
+		clearCollector(false);
 	});
 	
 	// Search for credit cards of default site/marketplace
@@ -370,8 +374,8 @@ function errorCollector(msg) {
 	collectorId = null;
 }
 
-function clearCollector() {
-	if ($('#collector').val() != "") {
+function clearCollector(forceIt) {
+	if ($('#collector').val() != "" || forceIt) {
 		$("#okCollector, #errorCollector, #spinnerCollector").hide("fast");
 		$('#collector').val([]);
 		collectorId = null;
