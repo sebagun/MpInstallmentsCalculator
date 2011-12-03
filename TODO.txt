@@ -1,6 +1,4 @@
-﻿* agregar README.md para github [cuando esté en Opera así pongo el link a la extensión]
-* subir a opera [WIP]
-
+﻿
 * Soporte para accepted_payment_methods (búsqueda por vendedor)
 Poder buscar por ID, nickname (uppercasear) o email:
 https://api.mercadolibre.com/users/85356121
