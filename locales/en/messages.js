@@ -31,6 +31,7 @@ msg["collectorUser.invalid.id"] = "The ID entered is invalid, must be only numbe
 msg["collectorUser.notFound.nickname"] = "The user doesn't exist, check the entered nickname.";
 msg["collectorUser.notFound.email"] = "The user doesn't exist, check the entered e-mail address.";
 msg["collectorUser.notFound.id"] = "The user doesn't exist, check the entered ID.";
+msg["collectorUser.unsupportedSite"] = "The user belongs to an unsupported country.";
 msg["collectorUser.clear.alt"] = "Clear seller";
 msg["collectorUser.clear.title"] = "Clear seller";
 msg["collectorUser.help.alt"] = "Help";

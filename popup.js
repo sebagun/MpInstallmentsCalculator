@@ -398,6 +398,13 @@ function updateSiteWithoutTrigger(siteId) {
 	$("#sites input, #marketplaces input").change(onChangeSiteOrMarketplaceFunction); // Restores the original behaviour
 }
 
+function supportedSite(siteId) {
+	var siteIds = $.map(sites, function(value, index) {
+		return value.id;
+	});
+	return $.inArray(siteId, siteIds) > -1;
+}
+
 function getUserInfo() {
 	$.jsonp({
 		url: mlapiUrls["users.by." + selectedCollectorDataType()].replace("##USER_DATA##", $('#collector').val()),
@@ -405,6 +412,10 @@ function getUserInfo() {
 		success: function(data, status) {
 			$("#spinnerCollector").hide("fast");
 			if (data[0] == 200) {
+				if (!supportedSite(data[2].site_id)) {
+					errorCollector("collectorUser.unsupportedSite");
+					return;
+				}
 				if (data[2].site_id != selectedSite()) {
 					updateSiteWithoutTrigger(data[2].site_id); // Selects the collector's site
 				}

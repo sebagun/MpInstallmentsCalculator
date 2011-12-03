@@ -31,6 +31,7 @@ msg["collectorUser.invalid.id"] = "El ID ingresado es inválido, deben ser sólo
 msg["collectorUser.notFound.nickname"] = "El usuario no existe, revise el nickname ingresado.";
 msg["collectorUser.notFound.email"] = "El usuario no existe, revise la dirección de e-mail ingresada.";
 msg["collectorUser.notFound.id"] = "El usuario no existe, revise el ID ingresado.";
+msg["collectorUser.unsupportedSite"] = "El usuario pertenece a un país no soportado.";
 msg["collectorUser.clear.alt"] = "Limpiar vendedor";
 msg["collectorUser.clear.title"] = "Limpiar vendedor";
 msg["collectorUser.help.alt"] = "Ayuda";
