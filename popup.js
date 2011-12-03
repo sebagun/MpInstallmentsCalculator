@@ -73,6 +73,7 @@ $(document).ready(function() {
 	
 	// Trigger the search for available cards when user selects a site/marketplace
 	onChangeSiteOrMarketplaceFunction = function() {
+		clearCollectorInternal();
 		getCardsInfo();
 		changeCurrencySymbol();
 		// Update the preferences
@@ -376,11 +377,15 @@ function errorCollector(msg) {
 	collectorId = null;
 }
 
+function clearCollectorInternal() {
+	$("#okCollector, #errorCollector, #spinnerCollector").hide("fast");
+	$('#collector').val([]);
+	collectorId = null;
+}
+
 function clearCollector(forceIt) {
 	if ($('#collector').val() != "" || forceIt) {
-		$("#okCollector, #errorCollector, #spinnerCollector").hide("fast");
-		$('#collector').val([]);
-		collectorId = null;
+		clearCollectorInternal();
 		getCardsInfo();
 	}
 }
