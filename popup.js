@@ -17,17 +17,41 @@ var badges = [
 var payerCosts = [];
 var exceptionsByCardIssuer = [];
 var amount = 0.0;
+var collectorId = null;
+var onChangeSiteOrMarketplaceFunction = null;
+
+// MercadoLibre's API endpoints
+const mlapiBaseUrl = "https://api.mercadolibre.com/";
+var mlapiUrls = new Array();
+mlapiUrls["users.by.nickname"] = mlapiBaseUrl + "users/search?nickname=##USER_DATA##&callback=?";
+mlapiUrls["users.by.email"] = mlapiBaseUrl + "users/search?email=##USER_DATA##&callback=?";
+mlapiUrls["users.by.id"] = mlapiBaseUrl + "users/##USER_DATA##?callback=?";
+mlapiUrls["paymentMethods.list"] = mlapiBaseUrl + "sites/##SITE##/payment_methods?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["paymentMethods.single"] = mlapiBaseUrl + "sites/##SITE##/payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["acceptedPaymentMethods.list"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
 
 function fillLocalizedUI() {
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
 	$("#sites legend").text(getMsg("sites.legend"));
-	$("#amountToPay legend").text(getMsg("amountToPay.legend"));
+	$("#additionalData legend").text(getMsg("additionalData.legend"));
 	$("#cards legend").text(getMsg("cards.legend"));
 	$("#pricings legend").text(getMsg("pricings.legend"));
 	$("#cardIssuers legend").text(getMsg("cardIssuers.legend"));
 	
+	$("#amountToPay").text(getMsg("amountToPay.label"));
 	$("#clearAmount").attr({alt: getMsg("amountToPay.clear.alt"), title: getMsg("amountToPay.clear.title")});
 	$("#helpAmount").attr({alt: getMsg("amountToPay.help.alt"), title: getMsg("amountToPay.help.title")});
+	
+	$("#collectorUser").text(getMsg("collectorUser.label"));
+	$("#clearCollector").attr({alt: getMsg("collectorUser.clear.alt"), title: getMsg("collectorUser.clear.title")});
+	$("#helpCollector").attr({alt: getMsg("collectorUser.help.alt"), title: getMsg("collectorUser.help.title")});
+	$("#submitCollector").attr({alt: getMsg("collectorUser.submit.alt"), title: getMsg("collectorUser.submit.title")});
+	$("#okCollector").attr({alt: getMsg("collectorUser.ok.alt"), title: getMsg("collectorUser.ok.title")});
+	$("#errorCollector").attr({alt: getMsg("collectorUser.error.alt"), title: getMsg("collectorUser.error.title")});
+	$("#collectorDataTypeNickname").text(getMsg("collectorUser.dataType.nickname"));
+	$("#collectorDataTypeEmail").text(getMsg("collectorUser.dataType.email"));
+	$("#collectorDataTypeId").text(getMsg("collectorUser.dataType.id"));
 }
 
 $(document).ready(function() {
@@ -35,7 +59,7 @@ $(document).ready(function() {
 	fillLocalizedUI();
 	
 	// Hide stuff
-	$(".spinner-medium, .spinner-small").hide();
+	$(".spinner-medium, .spinner-small, #okCollector, #errorCollector").hide();
 	
 	// Load marketplaces
 	$.each(marketplaces, function(index, value) {
@@ -48,13 +72,15 @@ $(document).ready(function() {
 	});
 	
 	// Trigger the search for available cards when user selects a site/marketplace
-	$("#sites input, #marketplaces input").change(function() {
+	onChangeSiteOrMarketplaceFunction = function() {
+		clearCollectorInternal();
 		getCardsInfo();
 		changeCurrencySymbol();
 		// Update the preferences
 		widget.preferences.marketplaceId = selectedMarketplace();
 		widget.preferences.siteId = selectedSite();
-	});
+	};
+	$("#sites input, #marketplaces input").change(onChangeSiteOrMarketplaceFunction);
 	
 	// Load the currency symbol for default site
 	changeCurrencySymbol();
@@ -66,6 +92,24 @@ $(document).ready(function() {
 	
 	$("#clearAmount").click(function() {
 		clearAmount();
+	});
+	
+	// Validate the collector after the user clicks on the submit icon, or when the user hits enter on the field
+	$("#collector").keyup(function(e) {
+		if (e.keyCode == 13) { // enter key
+			updateCollector();
+		}
+		else if ((e.keyCode == 8 || e.keyCode == 46) && $('#collector').val() == "") { // backspace or delete keys
+			// If the user just cleared the field through the keyboard, force a clean clear
+			clearCollector(true);
+		}
+	});
+	$("#submitCollector").click(function() {
+		updateCollector();
+	});
+	
+	$("#clearCollector").click(function() {
+		clearCollector(false);
 	});
 	
 	// Search for credit cards of default site/marketplace
@@ -85,6 +129,10 @@ function selectedSite() {
 	return $('#sites input:checked').val();
 }
 
+function selectedCollectorDataType() {
+	return $('#collectorAdditionalData input[type=radio]:checked').val();
+}
+
 function selectedCard() {
 	return $('#cards input:checked').val();
 }
@@ -93,11 +141,19 @@ function selectedCardIssuer() {
 	return $('#cardIssuers input:checked').val();
 }
 
+function getCardsInfoUrl() {
+	return (collectorId == null) ? 
+		mlapiUrls["paymentMethods.list"].replace("##SITE##", selectedSite()).replace(
+			"##MARKETPLACE##", selectedMarketplace()) :
+		mlapiUrls["acceptedPaymentMethods.list"].replace("##USER_ID##", ""+collectorId).replace(
+			"##MARKETPLACE##", selectedMarketplace());
+}
+
 function getCardsInfo() {
 	$('#cards label, #pricings table, #cardIssuers label').hide("fast").remove();
 	$("#cards .spinner-medium").show("fast");
 	$.jsonp({
-		url: "https://api.mercadolibre.com/sites/" + selectedSite() + "/payment_methods?marketplace=" + selectedMarketplace() + "&callback=?",
+		url: getCardsInfoUrl(),
 		timeout: 30000,
 		success: function(data, status) {
 			$("#cards .spinner-medium").hide("fast");
@@ -117,11 +173,21 @@ function getCardsInfo() {
 	});
 }
 
+function getCardInfoUrl() {
+	return (collectorId == null) ? 
+		mlapiUrls["paymentMethods.single"].replace("##SITE##", selectedSite()).replace(
+			"##PAYMENT_METHOD##", selectedCard()).replace(
+				"##MARKETPLACE##", selectedMarketplace()) :
+		mlapiUrls["acceptedPaymentMethods.single"].replace("##USER_ID##", ""+collectorId).replace(
+			"##PAYMENT_METHOD##", selectedCard()).replace(
+				"##MARKETPLACE##", selectedMarketplace());
+}
+
 function getCardInfo() {
 	$('#pricings table, #cardIssuers label').hide("fast").remove();
 	$("#pricings .spinner-medium, #cardIssuers .spinner-medium").show("fast");
 	$.jsonp({
-		url: "https://api.mercadolibre.com/sites/" + selectedSite() + "/payment_methods/" + selectedCard() + "?marketplace=" + selectedMarketplace() + "&callback=?",
+		url: getCardInfoUrl(),
 		timeout: 30000,
 		success: function(data, status) {
 			$("#pricings .spinner-medium, #cardIssuers .spinner-medium").hide("fast");
@@ -254,9 +320,122 @@ function updateAmounts() {
 }
 
 function clearAmount() {
-	$('#amount').val([]);
-	amount = 0.0;
-	updatePricingsTable();
+	if ($('#amount').val() != "") {
+		$('#amount').val([]);
+		amount = 0.0;
+		updatePricingsTable();
+	}
+}
+
+function updateCollector() {
+	if ($('#collector').val() == "") {
+		return;
+	}
+	
+	$("#okCollector, #errorCollector").hide("fast");
+	$("#spinnerCollector").show("fast");
+	
+	// Fix the input
+	switch (selectedCollectorDataType()) {
+		case "nickname":
+			$('#collector').val($('#collector').val().toUpperCase());
+			break;
+		case "email":
+			$('#collector').val($('#collector').val().toLowerCase());
+			break;
+		case "id":
+			// Nothing to fix
+			break;
+	}
+	
+	// Check minimal integrity
+	switch (selectedCollectorDataType()) {
+		case "nickname":
+			// Nothing to validate
+			break;
+		case "email":
+			if (!$('#collector').val().match(/^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+$/)) {
+				errorCollector("collectorUser.invalid.email");
+				return;
+			}
+			break;
+		case "id":
+			if (isNaN(parseInt($('#collector').val(), 10))) {
+				errorCollector("collectorUser.invalid.id");
+				return;
+			}
+			break;
+	}
+	
+	// Format OK, ready to go...
+	getUserInfo();
+}
+
+function errorCollector(msg) {
+	$("#spinnerCollector").hide("fast");
+	$("#errorCollector").attr({alt: getMsg(msg), title: getMsg(msg)}).show("fast");
+	collectorId = null;
+}
+
+function clearCollectorInternal() {
+	$("#okCollector, #errorCollector, #spinnerCollector").hide("fast");
+	$('#collector').val([]);
+	collectorId = null;
+}
+
+function clearCollector(forceIt) {
+	if ($('#collector').val() != "" || forceIt) {
+		clearCollectorInternal();
+		getCardsInfo();
+	}
+}
+
+function updateSiteWithoutTrigger(siteId) {
+	$("#sites input, #marketplaces input").unbind('change'); // Clears the trigger for the sites
+	$('#sites input:checked').removeAttr("checked");
+	$('#sites input').val([siteId]); // Selects the new site
+	changeCurrencySymbol();
+	$("#sites input, #marketplaces input").change(onChangeSiteOrMarketplaceFunction); // Restores the original behaviour
+}
+
+function supportedSite(siteId) {
+	var siteIds = $.map(sites, function(value, index) {
+		return value.id;
+	});
+	return $.inArray(siteId, siteIds) > -1;
+}
+
+function getUserInfo() {
+	$.jsonp({
+		url: mlapiUrls["users.by." + selectedCollectorDataType()].replace("##USER_DATA##", $('#collector').val()),
+		timeout: 30000,
+		success: function(data, status) {
+			$("#spinnerCollector").hide("fast");
+			if (data[0] == 200) {
+				if (!supportedSite(data[2].site_id)) {
+					errorCollector("collectorUser.unsupportedSite");
+					return;
+				}
+				if (data[2].site_id != selectedSite()) {
+					updateSiteWithoutTrigger(data[2].site_id); // Selects the collector's site
+				}
+				$("#okCollector").show("fast");
+				collectorId = data[2].id;
+				if (selectedCard()) {
+					getCardInfo();
+				}
+				else {
+					getCardsInfo();
+				}
+			}
+			else {
+				errorCollector("collectorUser.notFound." + selectedCollectorDataType());
+			}
+		},
+		error: function(XHR, textStatus, errorThrown){
+			error("error.mlapi");
+		}
+	});
 }
 
 function updatePricingsTable() {

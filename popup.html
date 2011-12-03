@@ -15,14 +15,40 @@
 	<fieldset id="sites">
 		<legend></legend>
 	</fieldset>
-	<fieldset id="amountToPay">
+	<fieldset id="additionalData">
 		<legend></legend>
-		<label>
-			<span id="currency"></span>
-			<input type="text" name="amount" value="" id="amount" maxlength="9" />
-			<img src="/assets/img/action-remove.png" id="clearAmount" class="hand" />
-			<img src="/assets/img/action-help.png" id="helpAmount" class="help" />
-		</label>
+		<div id="amountAdditionalData">
+			<div class="column label">
+				<span id="amountToPay"></span>
+				<span id="currency"></span>
+			</div>
+			<div class="column input">
+				<input type="text" name="amount" value="" id="amount" maxlength="9" />
+			</div>
+			<div class="column actions">
+				<img src="/assets/img/action-remove.png" id="clearAmount" class="hand" />
+				<img src="/assets/img/action-help.png" id="helpAmount" class="help" />
+			</div>
+		</div>
+		<div id="collectorAdditionalData">
+			<div class="column label">
+				<span id="collectorUser"></span>
+			</div>
+			<div class="column input">
+				<input type="text" name="collector" value="" id="collector" maxlength="60" />
+			</div>
+			<div class="column actions">
+				<img src="/assets/img/action-submit.png" id="submitCollector" class="hand" />
+				<img src="/assets/img/spinner-small.gif" id="spinnerCollector" class="spinner-small" />
+				<img src="/assets/img/action-ok.png" id="okCollector" />
+				<img src="/assets/img/action-error.png" id="errorCollector" class="help" />
+				<img src="/assets/img/action-remove.png" id="clearCollector" class="hand" />
+				<img src="/assets/img/action-help.png" id="helpCollector" class="help" />
+				<label><input type="radio" name="collectorDataType" value="nickname" checked /><span id="collectorDataTypeNickname"></span></label>
+				<label><input type="radio" name="collectorDataType" value="email" /><span id="collectorDataTypeEmail"></span></label>
+				<label><input type="radio" name="collectorDataType" value="id" /><span id="collectorDataTypeId"></span></label>
+			</div>
+		</div>
 	</fieldset>
 	<fieldset id="cards">
 		<legend></legend>
@@ -36,6 +62,5 @@
 		<legend></legend>
 		<div class="spinner-medium" />
 	</fieldset>
-	<p id="test"></p>
 </body>
 </html>
