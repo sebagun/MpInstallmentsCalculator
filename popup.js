@@ -18,6 +18,7 @@ var payerCosts = [];
 var exceptionsByCardIssuer = [];
 var amount = 0.0;
 var collectorId = null;
+var onChangeSiteOrMarketplaceFunction = null;
 
 // MercadoLibre's API endpoints
 const mlapiBaseUrl = "https://api.mercadolibre.com/";
@@ -71,13 +72,14 @@ $(document).ready(function() {
 	});
 	
 	// Trigger the search for available cards when user selects a site/marketplace
-	$("#sites input, #marketplaces input").change(function() {
+	onChangeSiteOrMarketplaceFunction = function() {
 		getCardsInfo();
 		changeCurrencySymbol();
 		// Update the preferences
 		widget.preferences.marketplaceId = selectedMarketplace();
 		widget.preferences.siteId = selectedSite();
-	});
+	};
+	$("#sites input, #marketplaces input").change(onChangeSiteOrMarketplaceFunction);
 	
 	// Load the currency symbol for default site
 	changeCurrencySymbol();
@@ -383,6 +385,14 @@ function clearCollector(forceIt) {
 	}
 }
 
+function updateSiteWithoutTrigger(siteId) {
+	$("#sites input, #marketplaces input").unbind('change'); // Clears the trigger for the sites
+	$('#sites input:checked').removeAttr("checked");
+	$('#sites input').val([siteId]); // Selects the new site
+	changeCurrencySymbol();
+	$("#sites input, #marketplaces input").change(onChangeSiteOrMarketplaceFunction); // Restores the original behaviour
+}
+
 function getUserInfo() {
 	$.jsonp({
 		url: mlapiUrls["users.by." + selectedCollectorDataType()].replace("##USER_DATA##", $('#collector').val()),
@@ -390,6 +400,9 @@ function getUserInfo() {
 		success: function(data, status) {
 			$("#spinnerCollector").hide("fast");
 			if (data[0] == 200) {
+				if (data[2].site_id != selectedSite()) {
+					updateSiteWithoutTrigger(data[2].site_id); // Selects the collector's site
+				}
 				$("#okCollector").show("fast");
 				collectorId = data[2].id;
 				if (selectedCard()) {
