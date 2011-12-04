@@ -10,11 +10,12 @@ Description
 
 This extension allows you to quickly view active installments schemes to make credit card payments in MercadoPago and MercadoLibre.
 
-Just need to select the right website, the country where you reside and the card you want use to pay to see the current plans. You can optionally enter the amount you are planning to pay, to calculate what the total amount with interest is and the individual amounts for each installments plan.
+Just need to select the right website, the country where you reside and the card you want use to pay to see the current plans. You can optionally enter the amount you are planning to pay, to calculate what the total amount with interest is and the individual amounts for each installments plan. Also, if you know the nickname or e-mail from your seller, you can check if he has his own personalized promotions (only for big sellers).
 
 Changelog
 ---------
 
+* 1.1.0 - Support for seller's custom promotions. Graphical/usability improvements.
 * 1.0.2 - Compatible with Opera 11.60 and 12.00
 * 1.0.1 - Changed error message when MercadoLibre's API seems to be down
 * 1.0.0 - Initial release
