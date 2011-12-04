@@ -141,6 +141,10 @@ function selectedCardIssuer() {
 	return $('#cardIssuers input:checked').val();
 }
 
+function selectedCardIssuerName() {
+	return $('#cardIssuers input:checked').parent().text();
+}
+
 function getCardsInfoUrl() {
 	return (collectorId == null) ? 
 		mlapiUrls["paymentMethods.list"].replace("##SITE##", selectedSite()).replace(
@@ -267,7 +271,8 @@ function makePricingsTable(pricings) {
 		table.push("</td></tr>");
 	});
 	if (selectedCardIssuer()) {
-		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\" class=\"white-background\">");
+		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\" class=\"white-background center\">");
+		table.push("<img src=\"/assets/img/cardIssuers/" + selectedCardIssuer() + ".png\" alt=\"\" title=\"" + selectedCardIssuerName() + "\" class=\"cardIssuerLogo\" /><br/>");
 		table.push("<a href=\"javascript:restorePayerCosts();\">");
 		table.push(getMsg("pricings.table.restore"));
 		table.push("</a>");

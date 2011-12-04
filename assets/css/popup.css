@@ -79,3 +79,11 @@ label {
 .white-background {
 	background: #FFF;
 }
+.center {
+	text-align: center;
+}
+.cardIssuerLogo {
+	background: url(/assets/img/cardIssuers/unavailable.png) no-repeat top left;
+	width: 135px;
+	height: 40px;
+}
