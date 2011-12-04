@@ -1,0 +1,1 @@
+dnoseda's idea: pre-fill amount if the user is in a VIP
