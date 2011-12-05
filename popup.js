@@ -85,6 +85,9 @@ $(document).ready(function() {
 	// Load the currency symbol for default site
 	changeCurrencySymbol();
 	
+	// put default price if available
+	setDefaultAmount();
+	
 	// Validate the amount to pay after every change, and update per installments amounts
 	$("#amount").keyup(function() {
 		updateAmounts();
@@ -452,4 +455,31 @@ function updatePricingsTable() {
 		$('#pricings table').remove();
 		$("#pricings").append(makePricingsTable(payerCosts));	
 	}
+}
+
+function setDefaultAmount(){
+    
+    var h=document.location.href+"";
+    h=h.match(/...-\d+/);
+    alert(h);
+
+    if(h.length==1){
+            h=h[0].replace(/-/,"");
+            $.jsonp({
+                    url: "https://api.mercadolibre.com/items/"+h+"?callback=?",
+                    timeout: 30000,
+                    success: function(data, status) {
+                            $("#spinnerCollector").hide("fast");
+                            if (data[0] == 200) {
+                                    $("#amount").val(data[2].price); 
+                            }else {
+                                    errorCollector("collectorUser.notFound." + selectedCollectorDataType());
+                            }
+                    },
+                    error: function(XHR, textStatus, errorThrown){
+                           error("error.mlapi");
+                   }
+            });
+    }
+
 }
