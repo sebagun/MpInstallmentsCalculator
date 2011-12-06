@@ -55,6 +55,9 @@ function fillLocalizedUI() {
 }
 
 $(document).ready(function() {
+	// If the user is in a VIP, tries to get the url to auto-fill the item price
+	sendMessageToInjectedScript("request_vip_get_url");
+	
 	// Load localized messages
 	fillLocalizedUI();
 	
@@ -453,3 +456,33 @@ function updatePricingsTable() {
 		$("#pricings").append(makePricingsTable(payerCosts));	
 	}
 }
+
+////////////////// Messaging with the injected script //////////////////
+
+var injectedScriptPort;
+
+function handleMessageFromInjectedScript(event) {
+	opera.extension.postMessage("Message received from the injected script: " + event.data);
+	
+	if (event.data.indexOf("response_vip_get_url:") == 0) {
+		alert(event.data.substring("response_vip_get_url:".length));
+	}
+}
+
+opera.extension.onmessage = function(event) {
+	if (event.data == "Here is a port to the currently focused tab") {
+		if (event.ports.length > 0) {
+		injectedScriptPort = event.ports[0];
+			injectedScriptPort.onmessage = handleMessageFromInjectedScript;
+		}
+	}
+}
+
+function sendMessageToInjectedScript(message) {
+	if (injectedScriptPort) {
+		injectedScriptPort.postMessage(message);
+		opera.postError('the send sent is: ' + message);
+	}
+}
+
+////////////////// Messaging with the injected script //////////////////
