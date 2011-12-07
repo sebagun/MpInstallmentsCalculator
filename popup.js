@@ -30,6 +30,7 @@ mlapiUrls["paymentMethods.list"] = mlapiBaseUrl + "sites/##SITE##/payment_method
 mlapiUrls["paymentMethods.single"] = mlapiBaseUrl + "sites/##SITE##/payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["acceptedPaymentMethods.list"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["items"] = mlapiBaseUrl + "items/##ITEM_ID##?callback=?";
 
 function fillLocalizedUI() {
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
@@ -457,6 +458,26 @@ function updatePricingsTable() {
 	}
 }
 
+function setVipItemAmount(url) {
+	var h = url.match(/...-\d+/);
+	if (h.length == 1) {
+		h = h[0].replace(/-/, "");
+		$.jsonp({
+			url: mlapiUrls["items"].replace("##ITEM_ID##", h),
+			timeout: 30000,
+			success: function(data, status) {
+				if (data[0] == 200) {
+					$("#amount").val(data[2].price);
+					amount = data[2].price;
+				}
+			},
+			error: function(XHR, textStatus, errorThrown) {
+				// I don't care about this... the user will have to enter the price manually.
+			}
+		});
+	}
+}
+
 ////////////////// Messaging with the injected script //////////////////
 
 var injectedScriptPort;
@@ -465,7 +486,8 @@ function handleMessageFromInjectedScript(event) {
 	opera.extension.postMessage("Message received from the injected script: " + event.data);
 	
 	if (event.data.indexOf("response_vip_get_url:") == 0) {
-		alert(event.data.substring("response_vip_get_url:".length));
+		// Put default price if available of the item being seen
+		setVipItemAmount(event.data.substring("response_vip_get_url:".length));
 	}
 }
 
