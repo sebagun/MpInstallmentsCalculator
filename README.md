@@ -20,6 +20,11 @@ Changelog
 * 1.0.1 - Changed error message when MercadoLibre's API seems to be down
 * 1.0.0 - Initial release
 
+Contributors
+------------
+
+* [Damián Noseda](https://github.com/dnoseda) - Automatically put the item price if the user is in a MercadoLibre's product page
+
 License
 -------
 

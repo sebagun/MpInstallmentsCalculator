@@ -459,19 +459,29 @@ function updatePricingsTable() {
 }
 
 function setVipItemAmount(url) {
+	if (amount != 0.0) {
+		return; // Abort this magic if the user already entered an amount
+	}
 	var h = url.match(/...-\d+/);
 	if (h.length == 1) {
 		h = h[0].replace(/-/, "");
+		$("#spinnerAmount").show("fast");
 		$.jsonp({
 			url: mlapiUrls["items"].replace("##ITEM_ID##", h),
 			timeout: 30000,
 			success: function(data, status) {
+				$("#spinnerAmount").hide("fast");
+				if (amount != 0.0) {
+					return; // Abort this magic if the user already entered an amount
+				}
 				if (data[0] == 200) {
 					$("#amount").val(data[2].price);
 					amount = data[2].price;
+					updatePricingsTable();
 				}
 			},
 			error: function(XHR, textStatus, errorThrown) {
+				$("#spinnerAmount").hide("fast");
 				// I don't care about this... the user will have to enter the price manually.
 			}
 		});
