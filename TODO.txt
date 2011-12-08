@@ -1,1 +1,6 @@
-dnoseda's idea: pre-fill amount if the user is in a VIP
+http://dev.opera.com/articles/view/opera-extension-code-examples/#add-a-badge
+
+tabs.onfocus
+tabs.onblur
+
+ver si con esto puedo poner/sacar un badge al entrar/salir de un tab con una VIP
