@@ -302,6 +302,8 @@ function changeCurrencySymbol() {
 }
 
 function updateAmounts() {
+	$("#spinnerAmount").hide("fast");
+	
 	// First, I'll fix the amount to pay if it doesn't have the expected format
 	if (!$('#amount').val().match(/^[0-9]+(\.[0-9]{1,2})?$/)) {
 		// Replace comma with dot and the remove any character that aren't numbers or dot
