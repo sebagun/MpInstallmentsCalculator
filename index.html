@@ -4,23 +4,6 @@
 		<script type="text/javascript" src="/messages.js"></script>
 		<script type="text/javascript" src="/background.js"></script>
 		<title>MercadoPago Installments Calculator</title>
-		<script>
-			window.addEventListener("load", function() {
-				var theButton;
-				var UIItemProperties = {
-					disabled: false,
-					title: getMsg("extension.name"),
-					icon: "assets/icons/icon_18.png",
-					popup: {
-						href: "popup.html",
-						width: 600,
-						height: 490
-					}
-				}
-				theButton = opera.contexts.toolbar.createItem( UIItemProperties );
-				opera.contexts.toolbar.addItem( theButton );
-			}, false);
-		</script>
 	</head>
 	<body>
 	</body>

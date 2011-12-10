@@ -3,6 +3,8 @@
 
 **Installments calculator for MercadoPago and MercadoLibre credit card payments.**
 
+By [Sebastián Gun](https://github.com/sebagun)
+
 This is an [Opera extension](https://addons.opera.com/addons/extensions/) that you can find [here](https://addons.opera.com/addons/extensions/details/mercadopago-installments-calculator/). See also de [documentation](http://dev.opera.com/addons/extensions/) for [developing extensions](http://www.opera.com/addons/extensions/develop/).
 
 Description
@@ -24,6 +26,13 @@ Contributors
 ------------
 
 * [Damián Noseda](https://github.com/dnoseda) - Automatically put the item price if the user is in a MercadoLibre's product page
+
+Third parties
+-------------
+
+* This extension uses the [MercadoLibre API](http://mercadolibre.io/home).
+* Also uses the [jQuery](http://jquery.com/) and [jquery-jsonp](http://code.google.com/p/jquery-jsonp/) libraries.
+* Some icons taken from the [Open Icon Library](http://openiconlibrary.sourceforge.net/).
 
 License
 -------
