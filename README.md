@@ -31,7 +31,7 @@ Third parties
 -------------
 
 * This extension uses the [MercadoLibre API](http://mercadolibre.io/home).
-* Also uses the [jQuery](http://jquery.com/) and [jquery-jsonp](http://code.google.com/p/jquery-jsonp/) libraries.
+* Also uses the [jQuery](http://jquery.com/) library with the [jquery-jsonp](http://code.google.com/p/jquery-jsonp/) and [tinysort](http://code.google.com/p/tinysort/) plugins.
 * Some icons taken from the [Open Icon Library](http://openiconlibrary.sourceforge.net/).
 
 License

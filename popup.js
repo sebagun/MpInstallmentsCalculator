@@ -215,6 +215,8 @@ function getCardInfo() {
 					$("#cardIssuers").append("<label><input type=\"radio\" name=\"cardIssuer\" value=\"" + value.card_issuer.id + "\" id=\"" + value.card_issuer.id + "\" />" + value.card_issuer.name + "</label>");
 					exceptionsByCardIssuer[""+value.card_issuer.id] = value.payer_costs;
 				});
+				// Sort the list alphabetically
+				$("#cardIssuers label").tsort();
 				// Trigger the display of the card issuer's promotional pricings when the user selects it
 				$("#cardIssuers input").change(function() {
 					updatePricingsTable();
