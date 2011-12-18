@@ -23,4 +23,5 @@ bump:
 	find . -name config.xml -exec sed -i "s/version=\".*\..*\..*\" /version=\"$(version)\" /g" {} \;
 	git add config.xml
 	git commit -m "Version bumped to $(version)"
+	git tag $(version)
 	echo -e "\n>>> New version: $(version) - Committed and tagged"
