@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 		popup: {
 			href: "popup.html",
 			width: 600,
-			height: 490
+			height: 540
 		},
 		badge: {
 			textContent: '',

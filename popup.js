@@ -33,6 +33,8 @@ mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/a
 mlapiUrls["items"] = mlapiBaseUrl + "items/##ITEM_ID##?callback=?";
 
 function fillLocalizedUI() {
+	$("h1").text(getMsg("extension.name"));
+	
 	$("#marketplaces legend").text(getMsg("marketplaces.legend"));
 	$("#sites legend").text(getMsg("sites.legend"));
 	$("#additionalData legend").text(getMsg("additionalData.legend"));

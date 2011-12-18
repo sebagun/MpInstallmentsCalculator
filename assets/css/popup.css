@@ -5,6 +5,12 @@
 body {
 	background: url(/assets/img/popup-back.gif) left top repeat-x;
 }
+h1 {
+	text-align: center;
+	font: 18px Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	color: #000;
+}
 fieldset {
 	border: none;
 	border-top: 1px solid #C9DCA6;
