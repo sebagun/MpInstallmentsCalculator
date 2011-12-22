@@ -1,4 +1,4 @@
-﻿MercadoPago Installments Calculator
+MercadoPago Installments Calculator
 ===================================
 
 **Installments calculator for MercadoPago and MercadoLibre credit card payments.**

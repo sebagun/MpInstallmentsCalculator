@@ -1,4 +1,4 @@
-﻿//
+//
 // The background process
 //
 
@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 		popup: {
 			href: "popup.html",
 			width: 600,
-			height: 540
+			height: 544
 		},
 		badge: {
 			textContent: '',

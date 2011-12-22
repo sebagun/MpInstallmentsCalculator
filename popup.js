@@ -1,4 +1,4 @@
-﻿var marketplaces = [
+var marketplaces = [
 	{id:"NONE", name:"MercadoPago", logo:"logo-mercadopago.png"},
 	{id:"MELI", name:"MercadoLibre", logo:"logo-mercadolibre.png"}
 ];

@@ -1,4 +1,4 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @include http://articulo.mercadolibre.com.ar/MLA-*
 // @include https://articulo.mercadolibre.com.ar/MLA-*
 // @include http://produto.mercadolivre.com.br/MLB-*

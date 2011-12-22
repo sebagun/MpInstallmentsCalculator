@@ -1,4 +1,4 @@
-﻿// English translation (en)
+// English translation (en)
 
 var msg = new Array();
 
