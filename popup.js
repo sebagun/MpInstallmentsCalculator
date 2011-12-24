@@ -3,12 +3,12 @@ var marketplaces = [
 	{id:"MELI", name:"MercadoLibre", logo:"logo-mercadolibre.png"}
 ];
 var sites = [
-	{id:"MLA", name:"sites.MLA.name", flag:"flag-ar.png", currencySymbol: "$"},
-	{id:"MLB", name:"sites.MLB.name", flag:"flag-br.png", currencySymbol: "R$"},
-	{id:"MLC", name:"sites.MLC.name", flag:"flag-cl.png", currencySymbol: "$"},
-	{id:"MCO", name:"sites.MCO.name", flag:"flag-co.png", currencySymbol: "$"},
-	{id:"MLM", name:"sites.MLM.name", flag:"flag-mx.png", currencySymbol: "$"},
-	{id:"MLV", name:"sites.MLV.name", flag:"flag-ve.png", currencySymbol: "BsF"}
+	{id:"MLA", name:"sites.MLA.name", flag:"flag-ar.png", currencySymbol: "$", currencyId: "ARS"},
+	{id:"MLB", name:"sites.MLB.name", flag:"flag-br.png", currencySymbol: "R$", currencyId: "BRL"},
+	{id:"MLC", name:"sites.MLC.name", flag:"flag-cl.png", currencySymbol: "$", currencyId: "CLP"},
+	{id:"MCO", name:"sites.MCO.name", flag:"flag-co.png", currencySymbol: "$", currencyId: "COP"},
+	{id:"MLM", name:"sites.MLM.name", flag:"flag-mx.png", currencySymbol: "$", currencyId: "MXN"},
+	{id:"MLV", name:"sites.MLV.name", flag:"flag-ve.png", currencySymbol: "BsF", currencyId: "VEF"}
 ];
 var badges = [
 	{id:"promotion", description:"badges.promotion.description", file:"badge-promotion.png"}
@@ -31,6 +31,7 @@ mlapiUrls["paymentMethods.single"] = mlapiBaseUrl + "sites/##SITE##/payment_meth
 mlapiUrls["acceptedPaymentMethods.list"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["items"] = mlapiBaseUrl + "items/##ITEM_ID##?callback=?";
+mlapiUrls["currencyConversions"] = mlapiBaseUrl + "currency_conversions/search?from=##FROM##&to=##TO##";
 
 function fillLocalizedUI() {
 	$("h1").text(getMsg("extension.name"));
@@ -301,6 +302,12 @@ function getCurrencySymbol() {
 	})[0].currencySymbol;
 }
 
+function getCurrencyId() {
+	return $.grep(sites, function(value, index) {
+		return value.id == selectedSite();
+	})[0].currencyId;
+}
+
 function changeCurrencySymbol() {
 	$('#currency').text(getCurrencySymbol());
 }
@@ -464,6 +471,29 @@ function updatePricingsTable() {
 	}
 }
 
+var convertedAmount = 0.0;
+function convertAmount(amount, fromCurrency, toCurrency) {
+	$.support.cors = true; // It enables cross-site scripting
+	$.ajax({	// I can't use $.jsonp() because I need this request to be synchronous, and also CORS.
+		url: mlapiUrls["currencyConversions"].replace("##FROM##", fromCurrency).replace("##TO##", toCurrency),
+		dataType: 'json',
+		async: false,
+		cache: true,
+		success: function(data, textStatus, XHR) {
+			convertedAmount = round(amount * data.ratio);
+		},
+		error: function(XHR, textStatus, errorThrown) {
+			alert("error " + textStatus);
+			opera.postError("--- Error converting " + amount + " from " + fromCurrency + " to " + toCurrency + " ---");
+			opera.postError('XHR: ' + XHR);
+			opera.postError('textStatus: ' + textStatus);
+			opera.postError('errorThrown:' + errorThrown);
+			convertedAmount = amount; // Horrible fallback...
+		}
+	});
+	return convertedAmount;
+}
+
 function setVipItemAmount(url) {
 	if (amount != 0.0) {
 		return; // Abort this magic if the user already entered an amount
@@ -476,15 +506,25 @@ function setVipItemAmount(url) {
 			url: mlapiUrls["items"].replace("##ITEM_ID##", h),
 			timeout: 30000,
 			success: function(data, status) {
-				$("#spinnerAmount").hide("fast");
 				if (amount != 0.0) {
+					$("#spinnerAmount").hide("fast");
 					return; // Abort this magic if the user already entered an amount
 				}
 				if (data[0] == 200) {
-					$("#amount").val(data[2].price);
-					amount = data[2].price;
+					if ("USD" == data[2].currency_id) {
+						// Convert item's price to local currency
+						var localAmount = convertAmount(data[2].price, "USD", getCurrencyId());
+						$("#amount").val(localAmount);
+						amount = localAmount;
+					}
+					else {
+						// It is already in local currency
+						$("#amount").val(data[2].price);
+						amount = data[2].price;
+					}
 					updatePricingsTable();
 				}
+				$("#spinnerAmount").hide("fast");
 			},
 			error: function(XHR, textStatus, errorThrown) {
 				$("#spinnerAmount").hide("fast");
