@@ -17,6 +17,7 @@ Just need to select the right website, the country where you reside and the card
 Changelog
 ---------
 
+* 1.2.1 - Converts item prices in dollars to local currency
 * 1.2.0 - Display a badge on MercadoLibre's product pages and automatically put the item price. Minor UI tweaks.
 * 1.1.0 - Support for seller's custom promotions. Graphical/usability improvements.
 * 1.0.2 - Compatible with Opera 11.60 and 12.00
