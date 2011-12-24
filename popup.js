@@ -44,6 +44,7 @@ function fillLocalizedUI() {
 	$("#cardIssuers legend").text(getMsg("cardIssuers.legend"));
 	
 	$("#amountToPay").text(getMsg("amountToPay.label"));
+	$("#convertedAmount").attr({alt: getMsg("amountToPay.converted.alt"), title: getMsg("amountToPay.converted.alt")});
 	$("#clearAmount").attr({alt: getMsg("amountToPay.clear.alt"), title: getMsg("amountToPay.clear.title")});
 	$("#helpAmount").attr({alt: getMsg("amountToPay.help.alt"), title: getMsg("amountToPay.help.title")});
 	
@@ -66,7 +67,7 @@ $(document).ready(function() {
 	fillLocalizedUI();
 	
 	// Hide stuff
-	$(".spinner-medium, .spinner-small, #okCollector, #errorCollector").hide();
+	$(".spinner-medium, .spinner-small, #okCollector, #errorCollector, #convertedAmount").hide();
 	
 	// Load marketplaces
 	$.each(marketplaces, function(index, value) {
@@ -94,10 +95,12 @@ $(document).ready(function() {
 	
 	// Validate the amount to pay after every change, and update per installments amounts
 	$("#amount").keyup(function() {
+		$("#convertedAmount").hide("fast");
 		updateAmounts();
 	});
 	
 	$("#clearAmount").click(function() {
+		$("#convertedAmount").hide("fast");
 		clearAmount();
 	});
 	
@@ -472,6 +475,7 @@ function updatePricingsTable() {
 }
 
 var convertedAmount = 0.0;
+var conversionRatio = 1.0;
 function convertAmount(amount, fromCurrency, toCurrency) {
 	$.support.cors = true; // It enables cross-site scripting
 	$.ajax({	// I can't use $.jsonp() because I need this request to be synchronous, and also CORS.
@@ -480,6 +484,7 @@ function convertAmount(amount, fromCurrency, toCurrency) {
 		async: false,
 		cache: true,
 		success: function(data, textStatus, XHR) {
+			conversionRatio = data.ratio;
 			convertedAmount = round(amount * data.ratio);
 		},
 		error: function(XHR, textStatus, errorThrown) {
@@ -514,6 +519,11 @@ function setVipItemAmount(url) {
 					if ("USD" == data[2].currency_id) {
 						// Convert item's price to local currency
 						var localAmount = convertAmount(data[2].price, "USD", getCurrencyId());
+						if (localAmount != data[2].price) {
+							// Only show the icon if the conversion succeeded
+							$("#convertedAmount").attr({title: getMsg("amountToPay.converted.title").replace("##RATIO##", ""+conversionRatio)});
+							$("#convertedAmount").show("fast");
+						}
 						$("#amount").val(localAmount);
 						amount = localAmount;
 					}
