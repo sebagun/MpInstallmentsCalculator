@@ -28,6 +28,7 @@ Contributors
 ------------
 
 * [Damián Noseda](https://github.com/dnoseda) - Automatically put the item price if the user is in a MercadoLibre's product page
+* [Iván Pianciola](https://github.com/pulsovisual) - Brand new logo and nice ideas for the next UI design
 
 Third parties
 -------------
