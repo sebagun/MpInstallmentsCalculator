@@ -1,6 +1,7 @@
 var marketplaces = [
 	{id:"NONE", name:"MercadoPago", logo:"logo-mercadopago.png"},
-	{id:"MELI", name:"MercadoLibre", logo:"logo-mercadolibre.png"}
+	{id:"MELI", name:"MercadoLibre", logo:"logo-mercadolibre.png"},
+	{id:"MAOP", name:"MasOportunidades", logo:"logo-masoportunidades.gif"}
 ];
 var sites = [
 	{id:"MLA", name:"sites.MLA.name", flag:"flag-ar.png", currencySymbol: "$", currencyId: "ARS"},
