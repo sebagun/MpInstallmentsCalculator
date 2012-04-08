@@ -220,7 +220,7 @@ function getCardInfo() {
 			if (data[2].exceptions_by_card_issuer && data[2].exceptions_by_card_issuer.length > 0) {
 				$.each(data[2].exceptions_by_card_issuer, function(index, value) {
 					$("#cardIssuers").append("<label><input type=\"radio\" name=\"cardIssuer\" value=\"" + value.card_issuer.id + "\" id=\"" + value.card_issuer.id + "\" />" + value.card_issuer.name + "</label>");
-					exceptionsByCardIssuer[""+value.card_issuer.id] = value.payer_costs;
+					exceptionsByCardIssuer[""+value.card_issuer.id] = value;
 				});
 				// Sort the list alphabetically
 				$("#cardIssuers label").tsort();
@@ -251,7 +251,7 @@ function round(value) {
 	return Math.round(value * 100) / 100;
 }
 
-function makePricingsTable(pricings) {
+function makePricingsTable(pricings, totalFinancialCost) {
 	var table = new Array("<table border=\"1\" cellspacing=\"0\"><tr><th>");
 	table.push(getMsg("pricings.table.installments"));
 	table.push("</th><th>");
@@ -286,6 +286,9 @@ function makePricingsTable(pricings) {
 	if (selectedCardIssuer()) {
 		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\" class=\"white-background center\">");
 		table.push("<img src=\"/assets/img/cardIssuers/" + selectedCardIssuer() + ".png\" alt=\"\" title=\"" + selectedCardIssuerName() + "\" class=\"cardIssuerLogo\" /><br/>");
+		if (totalFinancialCost) {
+			table.push(getMsg("pricings.table.totalFinancialCost") + ": " + totalFinancialCost + " %<br/>");
+		}
 		table.push("<a href=\"javascript:restorePayerCosts();\">");
 		table.push(getMsg("pricings.table.restore"));
 		table.push("</a>");
@@ -465,13 +468,14 @@ function getUserInfo() {
 }
 
 function updatePricingsTable() {
+	$('#pricings table').remove();
 	if (selectedCardIssuer()) {
-		$('#pricings table').remove();
-		$("#pricings").append(makePricingsTable(exceptionsByCardIssuer[selectedCardIssuer()]));	
+		$("#pricings").append(makePricingsTable(
+				exceptionsByCardIssuer[selectedCardIssuer()].payer_costs,
+				exceptionsByCardIssuer[selectedCardIssuer()].total_financial_cost));
 	}
 	else if (selectedCard()) {
-		$('#pricings table').remove();
-		$("#pricings").append(makePricingsTable(payerCosts));	
+		$("#pricings").append(makePricingsTable(payerCosts), null);
 	}
 }
 

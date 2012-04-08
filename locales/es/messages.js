@@ -56,6 +56,7 @@ msg["pricings.table.installmentRate"] = "Interés";
 msg["pricings.table.totalAmount"] = "Monto<br />total";
 msg["pricings.table.installmentAmount"] = "Monto<br />por cuota";
 msg["pricings.table.extras"] = "Extras";
+msg["pricings.table.totalFinancialCost"] = "Costo financiero total";
 msg["pricings.table.restore"] = "Restablecer pricings originales de la tarjeta";
 msg["cardIssuers.none"] = "Actualmente no hay bancos con<br />promociones para esta tarjeta";
 msg["error.ups"] = "Ups... hubo un error. Por favor informámelo a sebastiangun@gmail.com con los pasos a seguir para reproducirlo. Gracias!";
