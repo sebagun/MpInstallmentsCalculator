@@ -51,6 +51,7 @@ msg["sites.MCO.name"] = "Colombia";
 msg["sites.MLM.name"] = "Mexico";
 msg["sites.MLV.name"] = "Venezuela";
 msg["badges.promotion.description"] = "Promotion without interest";
+msg["badges.interestDeduction.description"] = "The seller takes care of the costs of financing";
 msg["pricings.table.installments"] = "Shares";
 msg["pricings.table.installmentRate"] = "Interest";
 msg["pricings.table.totalAmount"] = "Total<br />amount";

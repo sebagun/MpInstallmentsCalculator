@@ -12,10 +12,12 @@ var sites = [
 	{id:"MLV", name:"sites.MLV.name", flag:"flag-ve.png", currencySymbol: "BsF", currencyId: "VEF"}
 ];
 var badges = [
-	{id:"promotion", description:"badges.promotion.description", file:"badge-promotion.png"}
+	{id:"promotion", description:"badges.promotion.description", file:"badge-promotion.png"},
+	{id:"interestDeduction", description:"badges.interestDeduction.description", file:"badge-interest_deduction.png"}
 ];
 
 var payerCosts = [];
+var labels = [];
 var exceptionsByCardIssuer = [];
 var amount = 0.0;
 var collectorId = null;
@@ -207,6 +209,7 @@ function getCardInfo() {
 		success: function(data, status) {
 			$("#pricings .spinner-medium, #cardIssuers .spinner-medium").hide("fast");
 			payerCosts = data[2].payer_costs;
+			labels = data[2].labels;
 			exceptionsByCardIssuer = [];
 			try {
 				updatePricingsTable();
@@ -253,6 +256,7 @@ function round(value) {
 
 function makePricingsTable(pricings, totalFinancialCost) {
 	var table = new Array("<table border=\"1\" cellspacing=\"0\"><tr><th>");
+	// Headers
 	table.push(getMsg("pricings.table.installments"));
 	table.push("</th><th>");
 	table.push(getMsg("pricings.table.installmentRate"));
@@ -267,6 +271,7 @@ function makePricingsTable(pricings, totalFinancialCost) {
 	table.push("<th>");
 	table.push(getMsg("pricings.table.extras"));
 	table.push("</th></tr>");
+	// Pricing rows
 	$.each(pricings, function(index, value) {
 		table.push("<tr><td>");
 		table.push(value.installments);
@@ -280,9 +285,16 @@ function makePricingsTable(pricings, totalFinancialCost) {
 			table.push(getCurrencySymbol() + " " + round(totalAmount / value.installments));
 			table.push("</td><td>");
 		}
-		table.push((value.installment_rate == 0 && value.installments > 1) ? makeBadge("promotion") : "");
+		// Badges (extras)
+		if (value.installment_rate == 0 && value.installments > 1) {
+			table.push(makeBadge("promotion"));
+			if (labels && labels.indexOf("interest_deduction_by_collector") > -1) {
+				table.push(makeBadge("interestDeduction"));
+			}
+		}
 		table.push("</td></tr>");
 	});
+	// Bank's logo
 	if (selectedCardIssuer()) {
 		table.push("<tr><td colspan=\"" + (amount > 0 ? 5 : 3) + "\" class=\"white-background center\">");
 		table.push("<img src=\"/assets/img/cardIssuers/" + selectedCardIssuer() + ".png\" alt=\"\" title=\"" + selectedCardIssuerName() + "\" class=\"cardIssuerLogo\" /><br/>");
