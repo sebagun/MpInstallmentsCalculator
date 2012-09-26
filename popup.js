@@ -172,6 +172,7 @@ function getCardsInfo() {
 	$.jsonp({
 		url: getCardsInfoUrl(),
 		timeout: 30000,
+		pageCache: true,
 		success: function(data, status) {
 			$("#cards .spinner-medium").hide("fast");
 			$.each(data[2], function(index, value) {
@@ -206,6 +207,7 @@ function getCardInfo() {
 	$.jsonp({
 		url: getCardInfoUrl(),
 		timeout: 30000,
+		pageCache: true,
 		success: function(data, status) {
 			$("#pricings .spinner-medium, #cardIssuers .spinner-medium").hide("fast");
 			payerCosts = data[2].payer_costs;
@@ -450,6 +452,7 @@ function getUserInfo() {
 	$.jsonp({
 		url: mlapiUrls["users.by." + selectedCollectorDataType()].replace("##USER_DATA##", $('#collector').val()),
 		timeout: 30000,
+		pageCache: true,
 		success: function(data, status) {
 			$("#spinnerCollector").hide("fast");
 			if (data[0] == 200) {
@@ -527,6 +530,7 @@ function setVipItemAmount(url) {
 		$.jsonp({
 			url: mlapiUrls["items"].replace("##ITEM_ID##", h),
 			timeout: 30000,
+			pageCache: true,
 			success: function(data, status) {
 				if (amount != 0.0) {
 					$("#spinnerAmount").hide("fast");
