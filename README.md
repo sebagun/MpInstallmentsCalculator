@@ -17,6 +17,7 @@ Just need to select the right website, the country where you reside and the card
 Changelog
 ---------
 
+* 1.2.4 - Added logos for new promotional banks. Minor performance improvements.
 * 1.2.3 - Display the card's total financial cost if available. New badge for users who take care of the costs of financing. Support for MasOportunidades.com.
 * 1.2.2 - Mexican banks logos added
 * 1.2.1 - Converts item prices in dollars to local currency
