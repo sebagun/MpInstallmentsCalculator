@@ -36,14 +36,14 @@ Contributors
 Third parties
 -------------
 
-* This extension uses the [MercadoLibre API](http://mercadolibre.io/home).
+* This extension uses the [MercadoLibre](http://developers.mercadolibre.com/) and [MercadoPago](http://developers.mercadopago.com/) APIs.
 * Also uses the [jQuery](http://jquery.com/) library with the [jquery-jsonp](http://code.google.com/p/jquery-jsonp/) and [tinysort](http://code.google.com/p/tinysort/) plugins.
 * Some icons taken from the [Open Icon Library](http://openiconlibrary.sourceforge.net/).
 
 License
 -------
 
-Copyright (c) 2011-2012 Sebastián Gun
+Copyright (c) 2011-2013 Sebastián Gun
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
