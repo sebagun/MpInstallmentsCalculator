@@ -13,10 +13,13 @@ var sites = [
 ];
 var badges = [
 	{id:"promotion", description:"badges.promotion.description", file:"badge-promotion.png"},
+	{id:"promotionDates", description:"badges.promotionDates.description", file:"badge-promotion_dates.png"},
 	{id:"interestDeduction", description:"badges.interestDeduction.description", file:"badge-interest_deduction.png"}
 ];
 
 var payerCosts = [];
+var issuersPayerCosts = [];
+var defaultCardIssuerId = null;
 var labels = [];
 var exceptionsByCardIssuer = [];
 var amount = 0.0;
@@ -33,6 +36,7 @@ mlapiUrls["paymentMethods.list"] = mlapiBaseUrl + "sites/##SITE##/payment_method
 mlapiUrls["paymentMethods.single"] = mlapiBaseUrl + "sites/##SITE##/payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["acceptedPaymentMethods.list"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods?marketplace=##MARKETPLACE##&callback=?";
 mlapiUrls["acceptedPaymentMethods.single"] = mlapiBaseUrl + "users/##USER_ID##/accepted_payment_methods/##PAYMENT_METHOD##?marketplace=##MARKETPLACE##&callback=?";
+mlapiUrls["issuerPayerCosts"] = mlapiBaseUrl + "sites/##SITE##/card_issuers/##ISSUER_ID##/payment_methods/##PAYMENT_METHOD##/payer_costs?callback=?";
 mlapiUrls["items"] = mlapiBaseUrl + "items/##ITEM_ID##?callback=?";
 mlapiUrls["currencyConversions"] = mlapiBaseUrl + "currency_conversions/search?from=##FROM##&to=##TO##";
 
@@ -158,6 +162,11 @@ function selectedCardIssuerName() {
 	return $('#cardIssuers input:checked').parent().text();
 }
 
+function selectedBankOrCardIssuer() {
+	// If there is a bank selected, return that issuer. Otherwise, return the default credit card issuer for the selected brand.
+	return (selectedCardIssuer()) ? selectedCardIssuer() : defaultCardIssuerId;
+}
+
 function getCardsInfoUrl() {
 	return (collectorId == null) ? 
 		mlapiUrls["paymentMethods.list"].replace("##SITE##", selectedSite()).replace(
@@ -167,6 +176,7 @@ function getCardsInfoUrl() {
 }
 
 function getCardsInfo() {
+	defaultCardIssuerId = null;
 	$('#cards label, #pricings table, #cardIssuers label').hide("fast").remove();
 	$("#cards .spinner-medium").show("fast");
 	$.jsonp({
@@ -187,6 +197,26 @@ function getCardsInfo() {
 		},
 		error: function(XHR, textStatus, errorThrown){
 			error("error.mlapi");
+		}
+	});
+}
+
+function getIssuerPayerCostsUrl(issuerId, pmId) {
+	return mlapiUrls["issuerPayerCosts"].replace("##SITE##", selectedSite()).replace(
+		"##ISSUER_ID##", ""+issuerId).replace("##PAYMENT_METHOD##", pmId);
+}
+
+function getIssuerPayerCosts(issuerId, pmId) {
+	$.jsonp({
+		url: getIssuerPayerCostsUrl(issuerId, pmId),
+		timeout: 30000,
+		pageCache: true,
+		success: function(data, status) {
+			issuersPayerCosts[""+issuerId+"-"+pmId] = data[2];
+			opera.postError("payerCosts "+issuerId+"-"+pmId+": " + JSON.stringify(issuersPayerCosts[""+issuerId+"-"+pmId]));
+		},
+		error: function(XHR, textStatus, errorThrown){
+			// Doesn't matter... it won't show the dates involving the promotions
 		}
 	});
 }
@@ -213,6 +243,8 @@ function getCardInfo() {
 			payerCosts = data[2].payer_costs;
 			labels = data[2].labels;
 			exceptionsByCardIssuer = [];
+			getIssuerPayerCosts(data[2].card_issuer.id, selectedCard());
+			defaultCardIssuerId = data[2].card_issuer.id;
 			try {
 				updatePricingsTable();
 			}
@@ -223,15 +255,21 @@ function getCardInfo() {
 				return;
 			}
 			if (data[2].exceptions_by_card_issuer && data[2].exceptions_by_card_issuer.length > 0) {
+				var issuerIds = new Array();
 				$.each(data[2].exceptions_by_card_issuer, function(index, value) {
 					$("#cardIssuers").append("<label><input type=\"radio\" name=\"cardIssuer\" value=\"" + value.card_issuer.id + "\" id=\"" + value.card_issuer.id + "\" />" + value.card_issuer.name + "</label>");
 					exceptionsByCardIssuer[""+value.card_issuer.id] = value;
+					issuerIds.push(value.card_issuer.id);
 				});
 				// Sort the list alphabetically
 				$("#cardIssuers label").tsort();
 				// Trigger the display of the card issuer's promotional pricings when the user selects it
 				$("#cardIssuers input").change(function() {
 					updatePricingsTable();
+				});
+				// Prefetch all promotions payer costs and valid dates in the background
+				$(issuerIds).each(function() {
+					getIssuerPayerCosts(this, selectedCard());
 				});
 			}
 			else {
@@ -244,11 +282,11 @@ function getCardInfo() {
 	});
 }
 
-function makeBadge(badgeId) {
+function makeBadge(badgeId, replacements) {
 	var badge = $.grep(badges, function(value, index) {
 		return value.id == badgeId;
 	})[0];
-	return "<img src=\"/assets/img/" + badge.file + "\" alt=\"" + getMsg(badge.description) + "\" title=\"" + getMsg(badge.description) + "\" />";
+	return "<img src=\"/assets/img/" + badge.file + "\" alt=\"" + getMsg(badge.description, replacements) + "\" title=\"" + getMsg(badge.description, replacements) + "\" class=\"badge\" />";
 }
 
 function round(value) {
@@ -293,6 +331,33 @@ function makePricingsTable(pricings, totalFinancialCost) {
 			if (labels && labels.indexOf("interest_deduction_by_collector") > -1) {
 				table.push(makeBadge("interestDeduction"));
 			}
+			else {
+				var issuerPayerCosts = issuersPayerCosts[""+selectedBankOrCardIssuer()+"-"+selectedCard()];
+				if (!issuerPayerCosts) {
+					// Go to sleep for a little while, maybe we are fetching this info in the background... Then repaint the table.
+					opera.postError("Sleeping for promotion dates...");
+					setTimeout("updatePricingsTable()", 1000);
+				}
+				if (issuerPayerCosts) {
+					opera.postError("Showing dates between promo for " + selectedBankOrCardIssuer() + "-" + selectedCard() + " " + value.installments + " installments");
+					var selectedPayerCosts = $.grep(issuerPayerCosts, function(pc, index) {
+						return (pc.status == "active") && (pc.installments == value.installments) && (pc.installment_rate == value.installment_rate) &&
+								(pc.marketplace == selectedMarketplace()) && pc.start_date && (pc.start_date != "") && pc.expiration_date && (pc.expiration_date != "") &&
+								(new Date(pc.start_date) <= new Date()) && (new Date(pc.expiration_date) >= new Date());
+					})[0];
+					if (selectedPayerCosts) {
+						opera.postError("selectedPayerCosts: " + JSON.stringify(selectedPayerCosts));
+						var sinceDate = prettyDateTime(new Date(selectedPayerCosts.start_date));
+						var dueDate = prettyDateTime(new Date(selectedPayerCosts.expiration_date));
+						if (sinceDate && dueDate) {
+							table.push(makeBadge("promotionDates", {"##SINCE_DATE##":sinceDate, "##DUE_DATE##":dueDate}));
+						}
+					}
+					else {
+						opera.postError("There is no data about dates involving this promotion!");
+					}
+				}
+			}
 		}
 		table.push("</td></tr>");
 	});
@@ -310,6 +375,15 @@ function makePricingsTable(pricings, totalFinancialCost) {
 	}
 	table.push("</table>");
 	return table.join("");
+}
+
+function prettyDateTime(date) {
+	var day = (date.getDate() < 10) ? "0"+date.getDate() : date.getDate();
+	var month = (date.getMonth()+1 < 10) ? "0"+(date.getMonth()+1) : (date.getMonth()+1);
+	var year = date.getFullYear();
+	var hours = (date.getHours() < 10) ? "0"+date.getHours() : date.getHours();
+	var minutes = (date.getMinutes() < 10) ? "0"+date.getMinutes() : date.getMinutes();
+	return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
 }
 
 function restorePayerCosts() {

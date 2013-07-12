@@ -2,8 +2,14 @@
 
 var msg = new Array();
 
-function getMsg(id) {
-	return msg[id];
+function getMsg(id, replacements) {
+	var message = msg[id];
+	if (message && replacements) {
+		for (var key in replacements) {
+			message = message.replace(key, replacements[key]);
+		}
+	}
+	return message;
 }
 
 msg["extension.name"] = "MercadoPago Installments Calculator";
@@ -51,6 +57,7 @@ msg["sites.MCO.name"] = "Colombia";
 msg["sites.MLM.name"] = "Mexico";
 msg["sites.MLV.name"] = "Venezuela";
 msg["badges.promotion.description"] = "Promotion without interest";
+msg["badges.promotionDates.description"] = "Promotion valid from ##SINCE_DATE## to ##DUE_DATE##";
 msg["badges.interestDeduction.description"] = "The seller takes care of the costs of financing";
 msg["pricings.table.installments"] = "Shares";
 msg["pricings.table.installmentRate"] = "Interest";

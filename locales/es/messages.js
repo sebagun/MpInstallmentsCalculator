@@ -2,8 +2,14 @@
 
 var msg = new Array();
 
-function getMsg(id) {
-	return msg[id];
+function getMsg(id, replacements) {
+	var message = msg[id];
+	if (message && replacements) {
+		for (var key in replacements) {
+			message = message.replace(key, replacements[key]);
+		}
+	}
+	return message;
 }
 
 msg["extension.name"] = "Calculador de cuotas de MercadoPago";
@@ -51,6 +57,7 @@ msg["sites.MCO.name"] = "Colombia";
 msg["sites.MLM.name"] = "México";
 msg["sites.MLV.name"] = "Venezuela";
 msg["badges.promotion.description"] = "Promoción sin interés";
+msg["badges.promotionDates.description"] = "Promoción válida desde el ##SINCE_DATE## hasta el ##DUE_DATE##";
 msg["badges.interestDeduction.description"] = "El vendedor absorbe los costos de financiación";
 msg["pricings.table.installments"] = "Cuotas";
 msg["pricings.table.installmentRate"] = "Interés";

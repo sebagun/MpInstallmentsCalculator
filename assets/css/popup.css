@@ -93,3 +93,6 @@ label {
 	width: 135px;
 	height: 40px;
 }
+.badge {
+	margin-right: 4px;
+}
